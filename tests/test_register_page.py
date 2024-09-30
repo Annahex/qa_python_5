@@ -211,3 +211,49 @@ class TestRegisterPage:
             expected_conditions.url_to_be(login_url))
         assert driver.current_url == login_url
         driver.quit()
+
+    def test_bread_button_scroll(self, base_url):
+        driver = webdriver.Chrome()
+        driver.get(base_url)
+        bread_locator = ".//main/section/div/div/span[text()='Булки']/parent::div"
+        sauces_locator = ".//main/section/div/div/span[text()='Соусы']/parent::div"
+        bread_header_locator = ".//main/section/div/h2[text()='Булки']"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, sauces_locator)))
+        # спрячем раздел булки, т.к. он виден по умолчанию
+        driver.find_element(By.XPATH, sauces_locator).click()
+        time.sleep(1)
+        driver.find_element(By.XPATH, bread_locator).click()
+        time.sleep(1)
+        assert driver.find_element(By.XPATH, bread_header_locator).location["y"] >= 0
+        driver.quit()
+
+    def test_sauce_button_scroll(self, base_url):
+        driver = webdriver.Chrome()
+        driver.get(base_url)
+        topping_locator = ".//main/section/div/div/span[text()='Начинки']/parent::div"
+        sauces_locator = ".//main/section/div/div/span[text()='Соусы']/parent::div"
+        sauses_header_locator = ".//main/section/div/h2[text()='Соусы']"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, topping_locator)))
+        # спрячем раздел соусы, т.к. он виден по умолчанию
+        driver.find_element(By.XPATH, topping_locator).click()
+        time.sleep(1)
+        driver.find_element(By.XPATH, sauces_locator).click()
+        time.sleep(1)
+        assert driver.find_element(By.XPATH, sauses_header_locator).location["y"] >= 0
+        driver.quit()
+
+    def test_topping_button_scroll(self, base_url):
+        driver = webdriver.Chrome()
+        driver.get(base_url)
+        topping_locator = ".//main/section/div/div/span[text()='Начинки']/parent::div"
+        topping_header_locator = ".//main/section/div/h2[text()='Начинки']"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, topping_locator)))
+        initial_pos = driver.find_element(By.XPATH, topping_header_locator).location["y"]
+        driver.find_element(By.XPATH, topping_locator).click()
+        time.sleep(1)
+        current_pos = driver.find_element(By.XPATH, topping_header_locator).location["y"]
+        assert initial_pos > current_pos
+        driver.quit()
