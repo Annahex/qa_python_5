@@ -181,3 +181,33 @@ class TestRegisterPage:
             expected_conditions.url_to_be(base_url))
         assert driver.current_url == base_url
         driver.quit()
+
+    def test_logout_from_account_page(
+            self, account_url, login_url, base_url, last_generated_password, last_generated_email):
+        driver = webdriver.Chrome()
+        driver.get(login_url)
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, ".//form//input")))
+        driver.find_element(By.XPATH, ".//input[@name='name']").send_keys(last_generated_email)
+        driver.find_element(By.XPATH, ".//input[@name='Пароль']").send_keys(last_generated_password)
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, ".//form//input")))
+        driver.find_element(By.XPATH, ".//form/button").click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(base_url))
+        assert driver.current_url == base_url
+        locator = ".//nav//p[text()='Личный Кабинет']/parent::a"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(account_url))
+        assert driver.current_url == account_url
+        locator = ".//main/div/nav/ul/li/button[text()='Выход']"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(login_url))
+        assert driver.current_url == login_url
+        driver.quit()
