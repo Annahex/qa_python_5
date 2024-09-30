@@ -15,6 +15,11 @@ def login_url():
 
 
 @pytest.fixture()
+def forgot_password_url():
+    return f'{BASE_URL}forgot-password'
+
+
+@pytest.fixture()
 def base_url():
     return BASE_URL
 

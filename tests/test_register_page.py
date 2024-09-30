@@ -51,6 +51,55 @@ class TestRegisterPage:
         assert driver.current_url == register_url
         driver.quit()
 
+    def test_open_login_page_from_main_page(self, base_url, login_url):
+        driver = webdriver.Chrome()
+        driver.get(base_url)
+        locator = ".//main/section//button[text()='Войти в аккаунт']"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(login_url))
+        assert driver.current_url == login_url
+        driver.quit()
+
+    def test_open_login_page_from_navbar(self, base_url, login_url):
+        driver = webdriver.Chrome()
+        driver.get(base_url)
+        locator = ".//nav//p[text()='Личный Кабинет']/parent::a"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(login_url))
+        assert driver.current_url == login_url
+        driver.quit()
+
+    def test_open_login_page_from_register_page(self, register_url, login_url):
+        driver = webdriver.Chrome()
+        driver.get(register_url)
+        locator = ".//main/div/div/p/a"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(login_url))
+        assert driver.current_url == login_url
+        driver.quit()
+
+    def test_open_login_page_from_forgot_password_page(self, forgot_password_url, login_url):
+        driver = webdriver.Chrome()
+        driver.get(forgot_password_url)
+        locator = ".//main/div/div/p/a"
+        WebDriverWait(driver, 3).until(
+            expected_conditions.visibility_of_element_located((By.XPATH, locator)))
+        driver.find_element(By.XPATH, locator).click()
+        WebDriverWait(driver, 3).until(
+            expected_conditions.url_to_be(login_url))
+        assert driver.current_url == login_url
+        driver.quit()
+
+
 
 
 
