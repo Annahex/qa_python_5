@@ -7,7 +7,6 @@ import time
 BASE_URL = 'https://stellarburgers.nomoreparties.site/'
 LOGIN_URL = f'{BASE_URL}login'
 ACCOUNT_URL = f'{BASE_URL}account/profile'
-ANY_INPUT_LOCATOR = ".//main//form//input"
 EMAIL_LOCATOR = ".//main//form//input[@name='name']"
 PASSWORD_LOCATOR = ".//main//form//input[@name='Пароль']"
 LOGIN_BUTTON_LOCATOR = ".//main//form/button"
@@ -24,55 +23,25 @@ TOPPING_HEADER_LOCATOR = ".//main/section/div/h2[text()='Начинки']"
 
 class TestMainPage:
 
-    def test_open_main_page_from_navbar_button(self, driver, random_email, random_password):
-        driver.get(LOGIN_URL)
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, ANY_INPUT_LOCATOR)))
-        driver.find_element(By.XPATH, EMAIL_LOCATOR).send_keys(random_email)
-        driver.find_element(By.XPATH, PASSWORD_LOCATOR).send_keys(random_password)
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, ANY_INPUT_LOCATOR)))
-        driver.find_element(By.XPATH, LOGIN_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
-            expected_conditions.url_to_be(BASE_URL))
-        assert driver.current_url == BASE_URL
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR)))
-        driver.find_element(By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
+    def test_open_main_page_from_navbar_button(self, driver_logged_in, random_email, random_password):
+        driver_logged_in.find_element(By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR).click()
+        WebDriverWait(driver_logged_in, 3).until(
             expected_conditions.url_to_be(ACCOUNT_URL))
-        assert driver.current_url == ACCOUNT_URL
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, NAVBAR_CONSTRUCTOR_BUTTON_LOCATOR)))
-        driver.find_element(By.XPATH, NAVBAR_CONSTRUCTOR_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
+        assert driver_logged_in.current_url == ACCOUNT_URL
+        driver_logged_in.find_element(By.XPATH, NAVBAR_CONSTRUCTOR_BUTTON_LOCATOR).click()
+        WebDriverWait(driver_logged_in, 3).until(
             expected_conditions.url_to_be(BASE_URL))
-        assert driver.current_url == BASE_URL
+        assert driver_logged_in.current_url == BASE_URL
 
-    def test_open_main_page_from_navbar_logo(self, driver, random_email, random_password):
-        driver.get(LOGIN_URL)
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, ANY_INPUT_LOCATOR)))
-        driver.find_element(By.XPATH, EMAIL_LOCATOR).send_keys(random_email)
-        driver.find_element(By.XPATH, PASSWORD_LOCATOR).send_keys(random_password)
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, ANY_INPUT_LOCATOR)))
-        driver.find_element(By.XPATH, LOGIN_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
-            expected_conditions.url_to_be(BASE_URL))
-        assert driver.current_url == BASE_URL
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR)))
-        driver.find_element(By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
+    def test_open_main_page_from_navbar_logo(self, driver_logged_in, random_email, random_password):
+        driver_logged_in.find_element(By.XPATH, NAVBAR_LOGIN_BUTTON_LOCATOR).click()
+        WebDriverWait(driver_logged_in, 3).until(
             expected_conditions.url_to_be(ACCOUNT_URL))
-        assert driver.current_url == ACCOUNT_URL
-        WebDriverWait(driver, 3).until(
-            expected_conditions.visibility_of_element_located((By.XPATH, NAVBAR_LOGO_BUTTON_LOCATOR)))
-        driver.find_element(By.XPATH, NAVBAR_LOGO_BUTTON_LOCATOR).click()
-        WebDriverWait(driver, 3).until(
+        assert driver_logged_in.current_url == ACCOUNT_URL
+        driver_logged_in.find_element(By.XPATH, NAVBAR_LOGO_BUTTON_LOCATOR).click()
+        WebDriverWait(driver_logged_in, 3).until(
             expected_conditions.url_to_be(BASE_URL))
-        assert driver.current_url == BASE_URL
+        assert driver_logged_in.current_url == BASE_URL
 
     def test_bread_button_scroll(self, driver):
         driver.get(BASE_URL)
